@@ -21,6 +21,8 @@
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
       <PackageReference Include="TagLibSharp" Version="2.2.0" />
+      <PackageReference Include="TraditionalChineseToSimplifiedConverter" Version="1.0.0" />
+      <PackageReference Include="z440.atl.core" Version="4.8.0" />
     </ItemGroup>
 
     <ItemGroup>

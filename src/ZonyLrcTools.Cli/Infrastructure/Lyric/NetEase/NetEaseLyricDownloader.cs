@@ -54,24 +54,27 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
+        protected override async ValueTask<string> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
         {
             await ValueTask.CompletedTask;
 
             var json = JsonConvert.DeserializeObject<GetLyricResponse>(Encoding.UTF8.GetString(data));
             if (json?.OriginalLyric == null || string.IsNullOrEmpty(json.OriginalLyric.Text))
             {
-                return new LyricItemCollection(null);
+                //return new LyricItemCollection(null);
+                return null;
             }
 
             if (json.OriginalLyric.Text.Contains("纯音乐，请欣赏"))
             {
-                return new LyricItemCollection(null);
+                //return new LyricItemCollection(null);
+                return null;
             }
 
-            return _lyricItemCollectionFactory.Build(
-                json.OriginalLyric.Text,
-                json.TranslationLyric.Text);
+            // return _lyricItemCollectionFactory.Build(
+            //     json.OriginalLyric.Text,
+            //     json.TranslationLyric.Text);
+            return json.OriginalLyric.Text;
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)

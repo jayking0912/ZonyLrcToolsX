@@ -1,5 +1,9 @@
 简体中文 | [English](./docs/en_US.md)
 
+#docker 运行
+docker build -t roonlyric -f Dockerfile .
+docker run -it -v /music:/music roonlyric:latest
+
 ## 免责声明
 - 本工具仅作个人学习研究使用，可运行的二进制文件仅用于演示功能，不得将源码及其产物用于商业用途，否则由此造成的相关法律问题，[本人](https://github.com/real-zony) 不承担任何法律责任。
 - 任何单位或个人因下载使用软件所产生的任何意外、疏忽、合约毁坏、诽谤、版权或知识产权侵犯及其造成的损失 (包括但不限于直接、间接、附带或衍生的损失等)，[本人](https://github.com/real-zony) 不承担任何法律责任。

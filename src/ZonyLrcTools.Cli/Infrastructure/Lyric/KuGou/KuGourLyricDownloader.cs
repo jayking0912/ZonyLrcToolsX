@@ -44,7 +44,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
+        protected override async ValueTask<string> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
         {
             await ValueTask.CompletedTask;
             var lyricJsonObj = JObject.Parse(Encoding.UTF8.GetString(data));
@@ -54,7 +54,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou
             }
 
             var lyricText = Encoding.UTF8.GetString(Convert.FromBase64String(lyricJsonObj.SelectToken("$.content").Value<string>()));
-            return _lyricItemCollectionFactory.Build(lyricText);
+            //return _lyricItemCollectionFactory.Build(lyricText);
+            return lyricText;
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)

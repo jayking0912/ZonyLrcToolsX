@@ -44,7 +44,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
             return Encoding.UTF8.GetBytes(lyricJsonString);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
+        protected override async ValueTask<string> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
         {
             await ValueTask.CompletedTask;
 
@@ -58,14 +58,16 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
 
             if (lyricJsonString.Contains("此歌曲为没有填词的纯音乐，请您欣赏"))
             {
-                return _lyricItemCollectionFactory.Build(null);
+                //return _lyricItemCollectionFactory.Build(null);
+                return null;
             }
 
             var lyricJsonObj = JObject.Parse(lyricJsonString);
             var sourceLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.lyric").Value<string>()));
             var translateLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.trans").Value<string>()));
 
-            return _lyricItemCollectionFactory.Build(sourceLyric, translateLyric);
+            //return _lyricItemCollectionFactory.Build(sourceLyric, translateLyric);
+            return sourceLyric;
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)

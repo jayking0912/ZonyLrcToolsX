@@ -171,25 +171,41 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             {
                 try
                 {
-                    var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
-                    var lyricFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
-                        $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
+                    //前置处理
+                    var (isNext,infoTem)=RoonLyric.LyricFrontCheck(info);
+                    if(isNext){
+                        info = infoTem;
+                        var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
+                        // var lyricFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
+                        //     $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
+                        if(!String.IsNullOrWhiteSpace(lyric)){
+                            //
+                            if (RoonLyric.WriteLyric(info.FilePath, lyric))
+                            {
+                                //System.Console.WriteLine("[成功]" + info.FilePath);
+                                //生成done文件
+                                RoonLyric.WriteResultFile(info.FilePath,".done", info.Name, info.Artist);
+                            }else{
+                                    //失败！
+                                info.IsSuccessful = false;
+                                RoonLyric.ClearLyric((info.FilePath));
+                                //生成loss文件
+                                RoonLyric.WriteResultFile(info.FilePath, ".error", "", "");
 
-                    if (File.Exists(lyricFilePath))
-                    {
-                        File.Delete(lyricFilePath);
+                            }
+
+                        }else{
+                            //失败！
+                            info.IsSuccessful = false;
+                            RoonLyric.ClearLyric((info.FilePath));
+                            //生成loss文件
+                            RoonLyric.WriteResultFile(info.FilePath, ".error", "", "");
+
+                        }
+                     
+                        
                     }
-
-                    if (lyric.IsPruneMusic)
-                    {
-                        info.IsSuccessful = true;
-                    }
-
-                    await using var stream = new FileStream(lyricFilePath, FileMode.Create);
-                    await using var sw = new BinaryWriter(stream);
-
-                    sw.Write(EncodingConvert(lyric));
-                    await stream.FlushAsync();
+                    
                 }
                 catch (ErrorCodeException ex)
                 {
@@ -209,7 +225,10 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 {
                     info.IsSuccessful = true;
                 }
+
+               
             }
+            
 
             foreach (var downloader in downloaderList)
             {

@@ -24,6 +24,8 @@ namespace ZonyLrcTools.Cli
     {
         public static async Task<int> Main(string[] args)
         {
+            //" download -d \"/Users/pi/Downloads/music/\" -l -n 1"
+            args= new string[]{"download", "-d", "/music/", "-l", "-n", "1"};
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             ConfigureLogger();
