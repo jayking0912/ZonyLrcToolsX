@@ -25,10 +25,10 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         public static (bool isContine,MusicInfo info) LyricFrontCheck(MusicInfo info)
         {
             //删除lrc文件
-            string lrcName = Path.GetFileNameWithoutExtension(info.FilePath)+".lrc";
-            if(File.Exists(lrcName)){
-                File.Delete(lrcName);
-            }
+            // string lrcName = Path.GetFileNameWithoutExtension(info.FilePath)+".lrc";
+            // if(File.Exists(lrcName)){
+            //     File.Delete(lrcName);
+            // }
 
             if (File.Exists(info.FilePath + ".done")){
                    //有.done 忽略

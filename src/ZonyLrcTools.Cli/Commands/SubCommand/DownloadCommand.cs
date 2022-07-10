@@ -171,13 +171,19 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             {
                 try
                 {
+                    //有lrc删除
+                    var lyricFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
+                            $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
+                        if(File.Exists(lyricFilePath)){
+                            System.Console.WriteLine("[删除]" + lyricFilePath);
+                            File.Delete(lyricFilePath);
+                        }
                     //前置处理
                     var (isNext,infoTem)=RoonLyric.LyricFrontCheck(info);
                     if(isNext){
                         info = infoTem;
                         var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
-                        // var lyricFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
-                        //     $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
+                        
                         if(!String.IsNullOrWhiteSpace(lyric)){
                             //
                             if (RoonLyric.WriteLyric(info.FilePath, lyric))
